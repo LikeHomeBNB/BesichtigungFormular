@@ -45,6 +45,24 @@
             font-size: 14px;
         }
         
+        .rating-select {
+            padding: 3px 8px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-size: 12px;
+            background: white;
+            width: 120px;
+        }
+        
+        .yes-no-select {
+            padding: 3px 8px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-size: 12px;
+            background: white;
+            width: 80px;
+        }
+        
         .form-row {
             margin-bottom: 8px;
             display: flex;
@@ -120,23 +138,57 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            table-layout: fixed;
         }
         
         .room-table th, .room-table td {
             border: 1px solid #333;
             padding: 8px;
             text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .room-table th:first-child, .room-table td:first-child {
+            width: 25%;
+        }
+        
+        .room-table th:nth-child(2), .room-table td:nth-child(2) {
+            width: 37.5%;
+        }
+        
+        .room-table th:nth-child(3), .room-table td:nth-child(3) {
+            width: 37.5%;
         }
         
         .room-table th {
             background-color: #f0f0f0;
             font-weight: bold;
+            font-size: 11px;
         }
         
         .room-table input {
             border: none;
             width: 100%;
             background: transparent;
+            font-size: 11px;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 768px) {
+            .room-table {
+                font-size: 10px;
+            }
+            
+            .room-table th, .room-table td {
+                padding: 4px;
+            }
+            
+            .room-table input {
+                font-size: 10px;
+                padding: 1px;
+            }
         }
         
         .control-panel {
@@ -192,19 +244,14 @@
         
         <!-- Sektion 1: Allgemeine Objektdaten -->
         <div class="section">
-            <div class="section-title">✅ 1) Allgemeine Objektdaten</div>
+            <div class="section-title">1) Allgemeine Objektdaten</div>
             <div class="form-row">
                 <label>Adresse:</label>
                 <input type="text" name="adresse">
             </div>
             <div class="form-row">
-                <label>Ansprechpartner (Makler/Eigentümer):</label>
-                <input type="text" name="ansprechpartner">
-            </div>
-            <div class="form-row">
-                <label>Datum/Uhrzeit:</label>
+                <label>Datum:</label>
                 <input type="date" name="datum" style="width: 150px;">
-                <input type="time" name="uhrzeit" style="width: 100px; margin-left: 10px;">
             </div>
             <div class="form-row">
                 <label>Wer besichtigt?</label>
@@ -225,7 +272,7 @@
         
         <!-- Sektion 2: Fragen an den Verkäufer -->
         <div class="section">
-            <div class="section-title">✅ 2) Fragen an den Verkäufer</div>
+            <div class="section-title">2) Fragen an den Verkäufer</div>
             <div class="form-row">
                 <label>1. Warum wird verkauft / vermietet?</label>
                 <input type="text" name="grund_verkauf">
@@ -242,49 +289,96 @@
                 <label>4. (Nur bei WEG) Sind größere Maßnahmen am Gemeinschaftseigentum geplant?</label>
                 <input type="text" name="weg_massnahmen">
             </div>
+            <div style="margin-top: 15px;">
+                <label style="font-weight: bold;">Anmerkungen:</label>
+                <textarea name="anmerkungen_verkaeufer" style="margin-top: 5px;"></textarea>
+            </div>
         </div>
         
         <!-- Sektion 3: Basis-Check -->
         <div class="section">
-            <div class="section-title">✅ 3) Basis-Check (immer ausfüllen)</div>
+            <div class="section-title">3) Basis-Check (immer ausfüllen)</div>
             <div class="form-row">
                 <label>1. Lage der Straße:</label>
-                <input type="text" name="lage_strasse">
+                <select class="rating-select" name="lage_strasse">
+                    <option value="">-- Auswählen --</option>
+                    <option value="sehr_gut">sehr gut</option>
+                    <option value="gut">gut</option>
+                    <option value="normal">normal</option>
+                    <option value="schlecht">schlecht</option>
+                    <option value="sehr_schlecht">sehr schlecht</option>
+                </select>
             </div>
             <div class="form-row">
                 <label>2. Nachbarschaft / Umfeld:</label>
-                <input type="text" name="nachbarschaft">
+                <select class="rating-select" name="nachbarschaft">
+                    <option value="">-- Auswählen --</option>
+                    <option value="sehr_gut">sehr gut</option>
+                    <option value="gut">gut</option>
+                    <option value="normal">normal</option>
+                    <option value="schlecht">schlecht</option>
+                    <option value="sehr_schlecht">sehr schlecht</option>
+                </select>
             </div>
             <div class="form-row">
                 <label>3. Hausflur / Eingangsbereich:</label>
-                <input type="text" name="hausflur">
+                <select class="rating-select" name="hausflur">
+                    <option value="">-- Auswählen --</option>
+                    <option value="sehr_gut">sehr gut</option>
+                    <option value="gut">gut</option>
+                    <option value="normal">normal</option>
+                    <option value="schlecht">schlecht</option>
+                    <option value="sehr_schlecht">sehr schlecht</option>
+                </select>
             </div>
             <div class="form-row">
                 <label>4. Keller / Gemeinschaftsräume:</label>
-                <input type="text" name="keller">
+                <select class="rating-select" name="keller">
+                    <option value="">-- Auswählen --</option>
+                    <option value="sehr_gut">sehr gut</option>
+                    <option value="gut">gut</option>
+                    <option value="normal">normal</option>
+                    <option value="schlecht">schlecht</option>
+                    <option value="sehr_schlecht">sehr schlecht</option>
+                </select>
             </div>
             <div class="form-row">
                 <label>5. Grundriss passend:</label>
-                <input type="text" name="grundriss_passend">
+                <select class="yes-no-select" name="grundriss_passend">
+                    <option value="">-- Auswählen --</option>
+                    <option value="ja">Ja</option>
+                    <option value="nein">Nein</option>
+                </select>
             </div>
             <div class="form-row">
                 <label>6. Zimmeraufteilung nutzbar:</label>
-                <input type="text" name="zimmeraufteilung">
+                <select class="yes-no-select" name="zimmeraufteilung">
+                    <option value="">-- Auswählen --</option>
+                    <option value="ja">Ja</option>
+                    <option value="nein">Nein</option>
+                </select>
             </div>
             <div class="form-row">
                 <label>7. Fenster & Türen Zustand:</label>
-                <input type="text" name="fenster_tueren">
+                <select class="rating-select" name="fenster_tueren">
+                    <option value="">-- Auswählen --</option>
+                    <option value="sehr_gut">sehr gut</option>
+                    <option value="gut">gut</option>
+                    <option value="normal">normal</option>
+                    <option value="schlecht">schlecht</option>
+                    <option value="sehr_schlecht">sehr schlecht</option>
+                </select>
             </div>
             <div class="form-row">
-                <label>8. Sanitär / Küchenanschlüsse:</label>
-                <input type="text" name="sanitaer_kueche">
+                <label>8. Option Grundriss-Optimierung:</label>
+                <select class="yes-no-select" name="grundriss_optimierung">
+                    <option value="">-- Auswählen --</option>
+                    <option value="ja">Ja</option>
+                    <option value="nein">Nein</option>
+                </select>
             </div>
             <div class="form-row">
-                <label>9. Option Grundriss-Optimierung:</label>
-                <input type="text" name="grundriss_optimierung">
-            </div>
-            <div class="form-row">
-                <label>10. Stellplätze (Anzahl):</label>
+                <label>9. Stellplätze (Anzahl):</label>
                 <input type="text" name="stellplaetze">
             </div>
             <div style="margin-top: 15px;">
@@ -299,17 +393,18 @@
         
         <!-- Dokumentation-Checkliste -->
         <div class="section">
-            <div class="section-title">✅ Dokumentation-Checkliste</div>
+            <div class="section-title">Dokumentation-Checkliste</div>
             <div class="checkbox-group" style="flex-direction: column; gap: 8px;">
                 <label><input type="checkbox" name="fotos"> genügend Fotos erstellt</label>
                 <label><input type="checkbox" name="video"> ein Rundgang Video erstellt</label>
                 <label><input type="checkbox" name="nachmessen"> unklare Maßeinheiten nachgemessen</label>
+                <label><input type="checkbox" name="sanitaer_eingezeichnet"> Sanitär und Küchenanschlüsse eingezeichnet</label>
             </div>
         </div>
         
         <!-- Sektion 4: Erweiterter Block -->
         <div class="section">
-            <div class="section-title">✅ 4) Erweiterter Block: Gebäude & Gemeinschaft</div>
+            <div class="section-title">4) Erweiterter Block: Gebäude & Gemeinschaft</div>
             <div class="form-row">
                 <label>Heizung (Art, Alter):</label>
                 <input type="text" name="heizung">
@@ -325,6 +420,10 @@
             <div class="form-row">
                 <label>Höhe der Rücklagen:</label>
                 <input type="text" name="ruecklagen">
+            </div>
+            <div style="margin-top: 15px;">
+                <label style="font-weight: bold;">Anmerkungen:</label>
+                <textarea name="anmerkungen_erweiterter_block" style="margin-top: 5px;"></textarea>
             </div>
         </div>
         
@@ -343,7 +442,7 @@
         
         <!-- Container für dynamische Einheiten -->
         <div id="einheiten-container">
-            <div class="section-title">✅ 5) Einheiten</div>
+            <div class="section-title">5) Einheiten</div>
             <!-- Hier werden die Einheiten dynamisch eingefügt -->
         </div>
     </div>
@@ -354,7 +453,7 @@
             const container = document.getElementById('einheiten-container');
             
             // Container leeren, aber Titel behalten
-            container.innerHTML = '<div class="section-title">✅ 5) Einheiten</div>';
+            container.innerHTML = '<div class="section-title">5) Einheiten</div>';
             
             for (let i = 1; i <= anzahl; i++) {
                 const einheitHtml = `
@@ -373,7 +472,14 @@
                             </div>
                             <div class="form-row">
                                 <label>Zustand:</label>
-                                <input type="text" name="einheit_${i}_fenster_zustand">
+                                <select class="rating-select" name="einheit_${i}_fenster_zustand">
+                                    <option value="">-- Auswählen --</option>
+                                    <option value="sehr_gut">sehr gut</option>
+                                    <option value="gut">gut</option>
+                                    <option value="normal">normal</option>
+                                    <option value="schlecht">schlecht</option>
+                                    <option value="sehr_schlecht">sehr schlecht</option>
+                                </select>
                             </div>
                         </div>
                         
