@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkliste Immobilienbesichtigung</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c5aa0;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-row label {
+            display: inline-block;
+            width: 200px;
+            margin-right: 10px;
+        }
+        
+        input[type="text"], input[type="date"], input[type="time"], input[type="number"], textarea {
+            border: none;
+            border-bottom: 1px solid #333;
+            padding: 2px 5px;
+            font-size: 12px;
+            background: transparent;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            flex: none;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+        
+        textarea {
+            border: 1px solid #333;
+            min-height: 60px;
+            width: 100%;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+        }
+        
+        .unit-block {
+            border: 2px solid #2c5aa0;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .unit-title {
+            font-weight: bold;
+            color: #2c5aa0;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-decoration: underline;
+        }
+        
+        .subsection {
+            margin-bottom: 15px;
+        }
+        
+        .subsection-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .room-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .room-table th, .room-table td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .room-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        
+        .room-table input {
+            border: none;
+            width: 100%;
+            background: transparent;
+        }
+        
+        .control-panel {
+            background: #e8f2ff;
+            border: 2px solid #2c5aa0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .generate-button {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .generate-button:hover {
+            background: #1e3d6f;
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .print-button:hover {
+            background: #1e3d6f;
+        }
+        
+        #einheiten-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button no-print" onclick="window.print()">📄 Als PDF drucken</button>
+    
+    <div class="container">
+        <h1>📋 Checkliste Immobilienbesichtigung (Standard)</h1>
+        
+        <!-- Sektion 1: Allgemeine Objektdaten -->
+        <div class="section">
+            <div class="section-title">✅ 1) Allgemeine Objektdaten</div>
+            <div class="form-row">
+                <label>Adresse:</label>
+                <input type="text" name="adresse">
+            </div>
+            <div class="form-row">
+                <label>Ansprechpartner (Makler/Eigentümer):</label>
+                <input type="text" name="ansprechpartner">
+            </div>
+            <div class="form-row">
+                <label>Datum/Uhrzeit:</label>
+                <input type="date" name="datum" style="width: 150px;">
+                <input type="time" name="uhrzeit" style="width: 100px; margin-left: 10px;">
+            </div>
+            <div class="form-row">
+                <label>Wer besichtigt?</label>
+                <input type="text" name="besichtiger">
+            </div>
+            <div class="form-row">
+                <label>Anzahl Etagen / Wohnungen:</label>
+                <input type="text" name="etagen_wohnungen">
+            </div>
+            <div class="form-row">
+                <label>Zweck:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="zweck_kauf"> Kauf</label>
+                    <label><input type="checkbox" name="zweck_miete"> Miete</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sektion 2: Fragen an den Verkäufer -->
+        <div class="section">
+            <div class="section-title">✅ 2) Fragen an den Verkäufer</div>
+            <div class="form-row">
+                <label>1. Warum wird verkauft / vermietet?</label>
+                <input type="text" name="grund_verkauf">
+            </div>
+            <div class="form-row">
+                <label>2. Was ist dem Verkäufer wichtig?</label>
+                <input type="text" name="wichtig_verkaeufer">
+            </div>
+            <div class="form-row">
+                <label>3. Gibt es bekannte Mängel? (optional)</label>
+                <input type="text" name="bekannte_maengel">
+            </div>
+            <div class="form-row">
+                <label>4. (Nur bei WEG) Sind größere Maßnahmen am Gemeinschaftseigentum geplant?</label>
+                <input type="text" name="weg_massnahmen">
+            </div>
+        </div>
+        
+        <!-- Sektion 3: Basis-Check -->
+        <div class="section">
+            <div class="section-title">✅ 3) Basis-Check (immer ausfüllen)</div>
+            <div class="form-row">
+                <label>1. Lage der Straße:</label>
+                <input type="text" name="lage_strasse">
+            </div>
+            <div class="form-row">
+                <label>2. Nachbarschaft / Umfeld:</label>
+                <input type="text" name="nachbarschaft">
+            </div>
+            <div class="form-row">
+                <label>3. Hausflur / Eingangsbereich:</label>
+                <input type="text" name="hausflur">
+            </div>
+            <div class="form-row">
+                <label>4. Keller / Gemeinschaftsräume:</label>
+                <input type="text" name="keller">
+            </div>
+            <div class="form-row">
+                <label>5. Grundriss passend:</label>
+                <input type="text" name="grundriss_passend">
+            </div>
+            <div class="form-row">
+                <label>6. Zimmeraufteilung nutzbar:</label>
+                <input type="text" name="zimmeraufteilung">
+            </div>
+            <div class="form-row">
+                <label>7. Fenster & Türen Zustand:</label>
+                <input type="text" name="fenster_tueren">
+            </div>
+            <div class="form-row">
+                <label>8. Sanitär / Küchenanschlüsse:</label>
+                <input type="text" name="sanitaer_kueche">
+            </div>
+            <div class="form-row">
+                <label>9. Option Grundriss-Optimierung:</label>
+                <input type="text" name="grundriss_optimierung">
+            </div>
+            <div class="form-row">
+                <label>10. Stellplätze (Anzahl):</label>
+                <input type="text" name="stellplaetze">
+            </div>
+            <div style="margin-top: 15px;">
+                <label style="font-weight: bold;">Beschreibung (zum Beispiel Art):</label>
+                <textarea name="beschreibung_stellplaetze" style="margin-top: 5px;"></textarea>
+            </div>
+            <div style="margin-top: 15px;">
+                <label style="font-weight: bold;">Anmerkungen:</label>
+                <textarea name="anmerkungen_basis" style="margin-top: 5px;"></textarea>
+            </div>
+        </div>
+        
+        <!-- Dokumentation-Checkliste -->
+        <div class="section">
+            <div class="section-title">✅ Dokumentation-Checkliste</div>
+            <div class="checkbox-group" style="flex-direction: column; gap: 8px;">
+                <label><input type="checkbox" name="fotos"> genügend Fotos erstellt</label>
+                <label><input type="checkbox" name="video"> ein Rundgang Video erstellt</label>
+                <label><input type="checkbox" name="nachmessen"> unklare Maßeinheiten nachgemessen</label>
+            </div>
+        </div>
+        
+        <!-- Sektion 4: Erweiterter Block -->
+        <div class="section">
+            <div class="section-title">✅ 4) Erweiterter Block: Gebäude & Gemeinschaft</div>
+            <div class="form-row">
+                <label>Heizung (Art, Alter):</label>
+                <input type="text" name="heizung">
+            </div>
+            <div class="form-row">
+                <label>Dach/Fassade Zustand:</label>
+                <input type="text" name="dach_fassade">
+            </div>
+            <div class="form-row">
+                <label>Außenanlagen Zustand:</label>
+                <input type="text" name="aussenanlagen">
+            </div>
+            <div class="form-row">
+                <label>Höhe der Rücklagen:</label>
+                <input type="text" name="ruecklagen">
+            </div>
+        </div>
+        
+        <!-- Einheiten-Konfigurator -->
+        <div class="control-panel no-print">
+            <div class="section-title">🏠 Einheiten konfigurieren</div>
+            <div class="form-row">
+                <label>Anzahl Einheiten:</label>
+                <input type="number" id="anzahl-einheiten" min="1" max="20" value="1">
+                <button class="generate-button" onclick="generateEinheiten()">Einheiten generieren</button>
+            </div>
+            <div style="margin-top: 10px; font-size: 11px; color: #666;">
+                💡 Geben Sie die Anzahl der zu bewertenden Einheiten ein (z.B. Wohnungen bei Mehrfamilienhaus oder Etagen bei Einfamilienhaus)
+            </div>
+        </div>
+        
+        <!-- Container für dynamische Einheiten -->
+        <div id="einheiten-container">
+            <div class="section-title">✅ 5) Einheiten</div>
+            <!-- Hier werden die Einheiten dynamisch eingefügt -->
+        </div>
+    </div>
+
+    <script>
+        function generateEinheiten() {
+            const anzahl = parseInt(document.getElementById('anzahl-einheiten').value);
+            const container = document.getElementById('einheiten-container');
+            
+            // Container leeren, aber Titel behalten
+            container.innerHTML = '<div class="section-title">✅ 5) Einheiten</div>';
+            
+            for (let i = 1; i <= anzahl; i++) {
+                const einheitHtml = `
+                    <div class="unit-block">
+                        <div class="unit-title">Einheit ${i}: <input type="text" name="einheit_${i}_name" style="border-bottom: 2px solid #2c5aa0; min-width: 200px;" placeholder="z.B. EG, 1. OG, Wohnung 1A..."></div>
+                        
+                        <div class="subsection">
+                            <div class="subsection-title">Fenster:</div>
+                            <div class="form-row">
+                                <label>Art:</label>
+                                <input type="text" name="einheit_${i}_fenster_art">
+                            </div>
+                            <div class="form-row">
+                                <label>Baujahr:</label>
+                                <input type="text" name="einheit_${i}_fenster_baujahr">
+                            </div>
+                            <div class="form-row">
+                                <label>Zustand:</label>
+                                <input type="text" name="einheit_${i}_fenster_zustand">
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <div class="subsection-title">Allgemeine Elektrik:</div>
+                            <div class="form-row">
+                                <label>Zustand / Sanierungsbedarf:</label>
+                                <input type="text" name="einheit_${i}_elektrik">
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <div class="subsection-title">Räume:</div>
+                            <table class="room-table">
+                                <thead>
+                                    <tr>
+                                        <th>Raum</th>
+                                        <th>Zustand allgemein</th>
+                                        <th>Sanierungsbedarf</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Wohnzimmer</td><td><input type="text" name="einheit_${i}_wohnzimmer_zustand"></td><td><input type="text" name="einheit_${i}_wohnzimmer_sanierung"></td></tr>
+                                    <tr><td>Schlafzimmer 1</td><td><input type="text" name="einheit_${i}_schlafzimmer1_zustand"></td><td><input type="text" name="einheit_${i}_schlafzimmer1_sanierung"></td></tr>
+                                    <tr><td>Schlafzimmer 2</td><td><input type="text" name="einheit_${i}_schlafzimmer2_zustand"></td><td><input type="text" name="einheit_${i}_schlafzimmer2_sanierung"></td></tr>
+                                    <tr><td>Schlafzimmer 3</td><td><input type="text" name="einheit_${i}_schlafzimmer3_zustand"></td><td><input type="text" name="einheit_${i}_schlafzimmer3_sanierung"></td></tr>
+                                    <tr><td>Büro</td><td><input type="text" name="einheit_${i}_buero_zustand"></td><td><input type="text" name="einheit_${i}_buero_sanierung"></td></tr>
+                                    <tr><td>Küche</td><td><input type="text" name="einheit_${i}_kueche_zustand"></td><td><input type="text" name="einheit_${i}_kueche_sanierung"></td></tr>
+                                    <tr><td>Bad 1</td><td><input type="text" name="einheit_${i}_bad1_zustand"></td><td><input type="text" name="einheit_${i}_bad1_sanierung"></td></tr>
+                                    <tr><td>Bad 2</td><td><input type="text" name="einheit_${i}_bad2_zustand"></td><td><input type="text" name="einheit_${i}_bad2_sanierung"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="subsection">
+                            <div class="subsection-title">Sonstige Notizen Einheit:</div>
+                            <textarea name="einheit_${i}_notizen"></textarea>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += einheitHtml;
+            }
+        }
+        
+        // Initial eine Einheit generieren
+        generateEinheiten();
+    </script>
+</body>
+</html>
