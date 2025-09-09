@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkliste Immobilienbesichtigung</title>
+    <title>Checkliste Immobilienbesichtigung - Erweitert</title>
     <style>
         @media print {
             body { margin: 0; }
@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
         
@@ -45,13 +45,22 @@
             font-size: 14px;
         }
         
-        .rating-select {
+        .rating-select, .room-type-select {
             padding: 3px 8px;
             border: 1px solid #333;
             border-radius: 3px;
             font-size: 12px;
             background: white;
             width: 120px;
+        }
+        
+        .rating-scale-select {
+            padding: 3px 8px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-size: 11px;
+            background: white;
+            width: 100%;
         }
         
         .yes-no-select {
@@ -102,6 +111,16 @@
             resize: vertical;
         }
         
+        .disabled-field {
+            background-color: #f0f0f0;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .disabled-field::placeholder {
+            color: #999;
+        }
+        
         .checkbox-group {
             display: flex;
             gap: 20px;
@@ -124,6 +143,21 @@
             text-decoration: underline;
         }
         
+        .room-block {
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        
+        .room-title {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+        
         .subsection {
             margin-bottom: 15px;
         }
@@ -132,6 +166,21 @@
             font-weight: bold;
             margin-bottom: 8px;
             color: #555;
+        }
+        
+        .room-config-panel {
+            background: #e8f4fd;
+            border: 1px solid #2c5aa0;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .room-config-title {
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
         
         .room-table {
@@ -176,6 +225,58 @@
             box-sizing: border-box;
         }
         
+        .rating-help {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.3;
+        }
+        
+        .specific-criteria {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 3px;
+            margin-top: 8px;
+            font-size: 11px;
+        }
+        
+        .specific-criteria-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        .summary-section {
+            background: #f0f8ff;
+            border: 2px solid #2c5aa0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .summary-title {
+            font-weight: bold;
+            color: #2c5aa0;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .summary-item {
+            border-bottom: 1px solid #ccc;
+            padding: 8px 0;
+        }
+        
+        .summary-room-name {
+            font-weight: bold;
+            color: #444;
+        }
+        
+        .summary-rating {
+            color: #2c5aa0;
+            font-weight: bold;
+        }
+        
         @media (max-width: 768px) {
             .room-table {
                 font-size: 10px;
@@ -189,6 +290,16 @@
                 font-size: 10px;
                 padding: 1px;
             }
+            
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-row label {
+                width: auto;
+                margin-bottom: 5px;
+            }
         }
         
         .control-panel {
@@ -199,7 +310,7 @@
             margin-bottom: 25px;
         }
         
-        .generate-button {
+        .generate-button, .add-room-button, .remove-room-button {
             background: #2c5aa0;
             color: white;
             border: none;
@@ -210,8 +321,21 @@
             margin-left: 10px;
         }
         
+        .remove-room-button {
+            background: #d9534f;
+            margin-left: 5px;
+        }
+        
         .generate-button:hover {
             background: #1e3d6f;
+        }
+        
+        .add-room-button:hover {
+            background: #1e3d6f;
+        }
+        
+        .remove-room-button:hover {
+            background: #c9302c;
         }
         
         .print-button {
@@ -234,13 +358,23 @@
         #einheiten-container {
             margin-top: 20px;
         }
+        
+        .neuwo-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            color: #856404;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <button class="print-button no-print" onclick="window.print()">📄 Als PDF drucken</button>
     
     <div class="container">
-        <h1>📋 Checkliste Immobilienbesichtigung (Standard)</h1>
+        <h1>📋 Checkliste Immobilienbesichtigung (Erweitert mit Renovierungsbedarfs-Bewertung)</h1>
         
         <!-- Sektion 1: Allgemeine Objektdaten -->
         <div class="section">
@@ -442,86 +576,373 @@
         
         <!-- Container für dynamische Einheiten -->
         <div id="einheiten-container">
-            <div class="section-title">5) Einheiten</div>
+            <div class="section-title">5) Einheiten - Renovierungsbedarfs-Bewertung</div>
             <!-- Hier werden die Einheiten dynamisch eingefügt -->
         </div>
+        
+        <!-- Zusammenfassung (wird dynamisch befüllt) -->
+        <div id="zusammenfassung-container"></div>
     </div>
 
     <script>
+        // Raum-spezifische Bewertungskriterien
+        const raumKriterien = {
+            'badezimmer': 'Bewertungshilfe: Fliesen, Sanitärobjekte, Armaturen, Dusche/Wanne, Heizung',
+            'kueche': 'Bewertungshilfe: Anschlüsse, Wandzustand, Bodenfliesen, vorhandene Einbauten',
+            'wohnzimmer': 'Bewertungshilfe: Wände, Decke, Boden, Fenster, Heizkörper',
+            'schlafzimmer': 'Bewertungshilfe: Wände, Decke, Boden, Fenster, Heizkörper',
+            'kinderzimmer': 'Bewertungshilfe: Wände, Decke, Boden, Fenster, Heizkörper',
+            'flur': 'Bewertungshilfe: Boden, Wände, Beleuchtung, Eingangstür',
+            'balkon': 'Bewertungshilfe: Boden, Geländer, Überdachung, Anstrich',
+            'arbeitszimmer': 'Bewertungshilfe: Wände, Decke, Boden, Fenster, Heizkörper',
+            'abstellraum': 'Bewertungshilfe: Wände, Boden, Beleuchtung, Belüftung',
+            'gaeste_wc': 'Bewertungshilfe: Fliesen, Sanitärobjekte, Armaturen, Belüftung'
+        };
+
+        // Bewertungsskala mit Beschreibungen
+        const bewertungsSkala = {
+            '10': '10 - Perfekt renoviert, wie neu, keine Maßnahmen nötig',
+            '9': '9 - Sehr gut, höchstens kleinste Schönheitskorrekturen',
+            '8': '8 - Gut, eventuell kleine Verschönerungen sinnvoll',
+            '7': '7 - Ordentlich, kleine Auffrischungen empfehlenswert',
+            '6': '6 - Durchschnittlich, mehrere kleinere Maßnahmen nötig',
+            '5': '5 - Renovierungsbedürftig, größere Einzelmaßnahmen erforderlich',
+            '4': '4 - Stark veraltet, umfangreiche Renovierung nötig',
+            '3': '3 - Schlecht, fast alles muss erneuert werden',
+            '2': '2 - Sehr schlecht, Komplettsanierung erforderlich',
+            '1': '1 - Unbewohnbar, komplette Neuerstellung aller Bereiche nötig'
+        };
+
         function generateEinheiten() {
             const anzahl = parseInt(document.getElementById('anzahl-einheiten').value);
             const container = document.getElementById('einheiten-container');
             
             // Container leeren, aber Titel behalten
-            container.innerHTML = '<div class="section-title">5) Einheiten</div>';
+            container.innerHTML = '<div class="section-title">5) Einheiten - Renovierungsbedarfs-Bewertung</div>';
             
             for (let i = 1; i <= anzahl; i++) {
                 const einheitHtml = `
                     <div class="unit-block">
                         <div class="unit-title">Einheit ${i}: <input type="text" name="einheit_${i}_name" style="border-bottom: 2px solid #2c5aa0; min-width: 200px;" placeholder="z.B. EG, 1. OG, Wohnung 1A..."></div>
                         
-                        <div class="subsection">
-                            <div class="subsection-title">Fenster:</div>
+                        <!-- Raum-Konfiguration -->
+                        <div class="room-config-panel">
+                            <div class="room-config-title">🏠 Raum-Konfiguration</div>
                             <div class="form-row">
-                                <label>Art:</label>
-                                <input type="text" name="einheit_${i}_fenster_art">
-                            </div>
-                            <div class="form-row">
-                                <label>Baujahr:</label>
-                                <input type="text" name="einheit_${i}_fenster_baujahr">
-                            </div>
-                            <div class="form-row">
-                                <label>Zustand:</label>
-                                <select class="rating-select" name="einheit_${i}_fenster_zustand">
-                                    <option value="">-- Auswählen --</option>
-                                    <option value="sehr_gut">sehr gut</option>
-                                    <option value="gut">gut</option>
-                                    <option value="normal">normal</option>
-                                    <option value="schlecht">schlecht</option>
-                                    <option value="sehr_schlecht">sehr schlecht</option>
-                                </select>
+                                <label>Anzahl Räume:</label>
+                                <input type="number" id="anzahl-raeume-${i}" min="1" max="15" value="3" style="width: 60px;">
+                                <button class="generate-button" onclick="generateRaeume(${i})">Räume generieren</button>
                             </div>
                         </div>
                         
-                        <div class="subsection">
-                            <div class="subsection-title">Allgemeine Elektrik:</div>
-                            <div class="form-row">
-                                <label>Zustand / Sanierungsbedarf:</label>
-                                <input type="text" name="einheit_${i}_elektrik">
-                            </div>
+                        <!-- Container für Räume -->
+                        <div id="raeume-container-${i}">
+                            <!-- Räume werden hier eingefügt -->
                         </div>
                         
-                        <div class="subsection">
-                            <div class="subsection-title">Räume:</div>
-                            <table class="room-table">
-                                <thead>
-                                    <tr>
-                                        <th>Raum</th>
-                                        <th>Zustand allgemein</th>
-                                        <th>Sanierungsbedarf</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td>Wohnzimmer</td><td><input type="text" name="einheit_${i}_wohnzimmer_zustand"></td><td><input type="text" name="einheit_${i}_wohnzimmer_sanierung"></td></tr>
-                                    <tr><td>Schlafzimmer 1</td><td><input type="text" name="einheit_${i}_schlafzimmer1_zustand"></td><td><input type="text" name="einheit_${i}_schlafzimmer1_sanierung"></td></tr>
-                                    <tr><td>Schlafzimmer 2</td><td><input type="text" name="einheit_${i}_schlafzimmer2_zustand"></td><td><input type="text" name="einheit_${i}_schlafzimmer2_sanierung"></td></tr>
-                                    <tr><td>Schlafzimmer 3</td><td><input type="text" name="einheit_${i}_schlafzimmer3_zustand"></td><td><input type="text" name="einheit_${i}_schlafzimmer3_sanierung"></td></tr>
-                                    <tr><td>Büro</td><td><input type="text" name="einheit_${i}_buero_zustand"></td><td><input type="text" name="einheit_${i}_buero_sanierung"></td></tr>
-                                    <tr><td>Küche</td><td><input type="text" name="einheit_${i}_kueche_zustand"></td><td><input type="text" name="einheit_${i}_kueche_sanierung"></td></tr>
-                                    <tr><td>Bad 1</td><td><input type="text" name="einheit_${i}_bad1_zustand"></td><td><input type="text" name="einheit_${i}_bad1_sanierung"></td></tr>
-                                    <tr><td>Bad 2</td><td><input type="text" name="einheit_${i}_bad2_zustand"></td><td><input type="text" name="einheit_${i}_bad2_sanierung"></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
+                        <!-- Sonstige Notizen -->
                         <div class="subsection">
                             <div class="subsection-title">Sonstige Notizen Einheit:</div>
                             <textarea name="einheit_${i}_notizen"></textarea>
                         </div>
+                        
+                        <!-- Gesamtkostenschätzung (ausgegraut) -->
+                        <div class="subsection">
+                            <div class="subsection-title">Gesamtkostenschätzung:</div>
+                            <input type="text" name="einheit_${i}_gesamtkosten" class="disabled-field" placeholder="" readonly>
+                            <div class="neuwo-note">Kostenschätzung erfolgt durch NeuWohnen</div>
+                        </div>
+                        
+                        <!-- Renovierungsart-Empfehlung (ausgegraut) -->
+                        <div class="subsection">
+                            <div class="subsection-title">Renovierungsart-Empfehlung:</div>
+                            <select name="einheit_${i}_renovierungsart" class="rating-select disabled-field" disabled>
+                                <option value="">Von NeuWohnen zu bestimmen</option>
+                                <option value="einzelmassnahmen">Einzelmaßnahmen</option>
+                                <option value="kernsanierung">Kernsanierung</option>
+                            </select>
+                            <div class="neuwo-note">Wird von NeuWohnen bestimmt</div>
+                        </div>
                     </div>
                 `;
                 container.innerHTML += einheitHtml;
+                
+                // Initial 4 Räume generieren (Standard)
+                setTimeout(() => generateRaeume(i), 100);
             }
+            
+            // Zusammenfassung aktualisieren
+            setTimeout(updateZusammenfassung, 200);
+        }
+
+        function generateRaeume(einheitNummer) {
+            const anzahl = parseInt(document.getElementById(`anzahl-raeume-${einheitNummer}`).value);
+            const container = document.getElementById(`raeume-container-${einheitNummer}`);
+            
+            container.innerHTML = '';
+            
+            for (let r = 1; r <= anzahl; r++) {
+                const raumHtml = `
+                    <div class="room-block" id="raum-${einheitNummer}-${r}">
+                        <div class="room-title">
+                            Raum ${r}: 
+                            <select name="einheit_${einheitNummer}_raum_${r}_typ" class="room-type-select" onchange="updateRaumKriterien(${einheitNummer}, ${r})" style="width: 150px;">
+                                <option value="">-- Raum-Typ wählen --</option>
+                                <option value="badezimmer">Badezimmer</option>
+                                <option value="kueche">Küche</option>
+                                <option value="wohnzimmer">Wohnzimmer</option>
+                                <option value="schlafzimmer">Schlafzimmer</option>
+                                <option value="kinderzimmer">Kinderzimmer</option>
+                                <option value="flur">Flur</option>
+                                <option value="balkon">Balkon</option>
+                                <option value="arbeitszimmer">Arbeitszimmer</option>
+                                <option value="abstellraum">Abstellraum</option>
+                                <option value="gaeste_wc">Gäste-WC</option>
+                            </select>
+                            <button class="remove-room-button no-print" onclick="removeRaum(${einheitNummer}, ${r})" style="margin-left: 10px;">❌</button>
+                        </div>
+                        
+                        <!-- Zustandsbewertung -->
+                        <div class="form-row">
+                            <label>Zustandsbewertung (1-10):</label>
+                            <select name="einheit_${einheitNummer}_raum_${r}_bewertung" class="rating-scale-select" onchange="updateZusammenfassung()">
+                                <option value="">-- Bewertung wählen --</option>
+                                <option value="10">${bewertungsSkala['10']}</option>
+                                <option value="9">${bewertungsSkala['9']}</option>
+                                <option value="8">${bewertungsSkala['8']}</option>
+                                <option value="7">${bewertungsSkala['7']}</option>
+                                <option value="6">${bewertungsSkala['6']}</option>
+                                <option value="5">${bewertungsSkala['5']}</option>
+                                <option value="4">${bewertungsSkala['4']}</option>
+                                <option value="3">${bewertungsSkala['3']}</option>
+                                <option value="2">${bewertungsSkala['2']}</option>
+                                <option value="1">${bewertungsSkala['1']}</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Spezifische Kriterien -->
+                        <div id="kriterien-${einheitNummer}-${r}" class="specific-criteria" style="display: none;">
+                            <div class="specific-criteria-title">Spezifische Bewertungskriterien:</div>
+                            <div id="kriterien-text-${einheitNummer}-${r}"></div>
+                        </div>
+                        
+                        <!-- Renovierungsmaßnahmen -->
+                        <div style="margin-top: 10px;">
+                            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Konkrete Renovierungsmaßnahmen:</label>
+                            <textarea name="einheit_${einheitNummer}_raum_${r}_massnahmen" placeholder="Welche konkreten Arbeiten sind in diesem Raum nötig? (z.B. Wände streichen, neue Fliesen, Elektrik erneuern...)" style="width: 100%; min-height: 60px;"></textarea>
+                        </div>
+                        
+                        <!-- Kostenschätzung (ausgegraut) -->
+                        <div style="margin-top: 10px;">
+                            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Kostenschätzung:</label>
+                            <input type="text" name="einheit_${einheitNummer}_raum_${r}_kosten" class="disabled-field" placeholder="" readonly style="width: 100%;">
+                            <div class="neuwo-note">Kostenschätzung erfolgt durch NeuWohnen</div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += raumHtml;
+            }
+            
+            // Button zum Hinzufügen weiterer Räume
+            const addButtonHtml = `
+                <div class="no-print" style="text-align: center; margin: 10px 0;">
+                    <button class="add-room-button" onclick="addRaum(${einheitNummer})">+ Weiteren Raum hinzufügen</button>
+                </div>
+            `;
+            container.innerHTML += addButtonHtml;
+            
+            updateZusammenfassung();
+        }
+
+        function updateRaumKriterien(einheitNummer, raumNummer) {
+            const raumTyp = document.querySelector(`select[name="einheit_${einheitNummer}_raum_${raumNummer}_typ"]`).value;
+            const kriterienDiv = document.getElementById(`kriterien-${einheitNummer}-${raumNummer}`);
+            const kriterienText = document.getElementById(`kriterien-text-${einheitNummer}-${raumNummer}`);
+            
+            if (raumTyp && raumKriterien[raumTyp]) {
+                kriterienText.textContent = raumKriterien[raumTyp];
+                kriterienDiv.style.display = 'block';
+            } else {
+                kriterienDiv.style.display = 'none';
+            }
+        }
+
+        function addRaum(einheitNummer) {
+            const container = document.getElementById(`raeume-container-${einheitNummer}`);
+            const aktuelleRaeume = container.querySelectorAll('.room-block').length;
+            const neueRaumNummer = aktuelleRaeume + 1;
+            
+            // Button temporär entfernen
+            const addButton = container.querySelector('.no-print');
+            if (addButton) addButton.remove();
+            
+            const raumHtml = `
+                <div class="room-block" id="raum-${einheitNummer}-${neueRaumNummer}">
+                    <div class="room-title">
+                        Raum ${neueRaumNummer}: 
+                        <select name="einheit_${einheitNummer}_raum_${neueRaumNummer}_typ" class="room-type-select" onchange="updateRaumKriterien(${einheitNummer}, ${neueRaumNummer})" style="width: 150px;">
+                            <option value="">-- Raum-Typ wählen --</option>
+                            <option value="badezimmer">Badezimmer</option>
+                            <option value="kueche">Küche</option>
+                            <option value="wohnzimmer">Wohnzimmer</option>
+                            <option value="schlafzimmer">Schlafzimmer</option>
+                            <option value="kinderzimmer">Kinderzimmer</option>
+                            <option value="flur">Flur</option>
+                            <option value="balkon">Balkon</option>
+                            <option value="arbeitszimmer">Arbeitszimmer</option>
+                            <option value="abstellraum">Abstellraum</option>
+                            <option value="gaeste_wc">Gäste-WC</option>
+                        </select>
+                        <button class="remove-room-button no-print" onclick="removeRaum(${einheitNummer}, ${neueRaumNummer})" style="margin-left: 10px;">❌</button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label>Zustandsbewertung (1-10):</label>
+                        <select name="einheit_${einheitNummer}_raum_${neueRaumNummer}_bewertung" class="rating-scale-select" onchange="updateZusammenfassung()">
+                            <option value="">-- Bewertung wählen --</option>
+                            <option value="10">${bewertungsSkala['10']}</option>
+                            <option value="9">${bewertungsSkala['9']}</option>
+                            <option value="8">${bewertungsSkala['8']}</option>
+                            <option value="7">${bewertungsSkala['7']}</option>
+                            <option value="6">${bewertungsSkala['6']}</option>
+                            <option value="5">${bewertungsSkala['5']}</option>
+                            <option value="4">${bewertungsSkala['4']}</option>
+                            <option value="3">${bewertungsSkala['3']}</option>
+                            <option value="2">${bewertungsSkala['2']}</option>
+                            <option value="1">${bewertungsSkala['1']}</option>
+                        </select>
+                    </div>
+                    
+                    <div id="kriterien-${einheitNummer}-${neueRaumNummer}" class="specific-criteria" style="display: none;">
+                        <div class="specific-criteria-title">Spezifische Bewertungskriterien:</div>
+                        <div id="kriterien-text-${einheitNummer}-${neueRaumNummer}"></div>
+                    </div>
+                    
+                    <div style="margin-top: 10px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Konkrete Renovierungsmaßnahmen:</label>
+                        <textarea name="einheit_${einheitNummer}_raum_${neueRaumNummer}_massnahmen" placeholder="Welche konkreten Arbeiten sind in diesem Raum nötig? (z.B. Wände streichen, neue Fliesen, Elektrik erneuern...)" style="width: 100%; min-height: 60px;"></textarea>
+                    </div>
+                    
+                    <div style="margin-top: 10px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Kostenschätzung:</label>
+                        <input type="text" name="einheit_${einheitNummer}_raum_${neueRaumNummer}_kosten" class="disabled-field" placeholder="" readonly style="width: 100%;">
+                        <div class="neuwo-note">Kostenschätzung erfolgt durch NeuWohnen</div>
+                    </div>
+                </div>
+            `;
+            
+            // Button wieder hinzufügen
+            const addButtonHtml = `
+                <div class="no-print" style="text-align: center; margin: 10px 0;">
+                    <button class="add-room-button" onclick="addRaum(${einheitNummer})">+ Weiteren Raum hinzufügen</button>
+                </div>
+            `;
+            
+            container.innerHTML += raumHtml + addButtonHtml;
+            
+            // Anzahl Räume input aktualisieren
+            document.getElementById(`anzahl-raeume-${einheitNummer}`).value = neueRaumNummer;
+            
+            updateZusammenfassung();
+        }
+
+        function removeRaum(einheitNummer, raumNummer) {
+            const raumElement = document.getElementById(`raum-${einheitNummer}-${raumNummer}`);
+            if (raumElement) {
+                raumElement.remove();
+                updateZusammenfassung();
+            }
+        }
+
+        function updateZusammenfassung() {
+            const container = document.getElementById('zusammenfassung-container');
+            let zusammenfassungHtml = `
+                <div class="summary-section">
+                    <div class="summary-title">📊 Zusammenfassung Renovierungsbedarfs-Bewertung</div>
+            `;
+            
+            const einheiten = document.querySelectorAll('.unit-block');
+            let gesamtPunkte = 0;
+            let gesamtGewichtung = 0;
+            let anzahlEinheiten = 0;
+            
+            einheiten.forEach((einheit, index) => {
+                const einheitNummer = index + 1;
+                const einheitName = einheit.querySelector(`input[name="einheit_${einheitNummer}_name"]`)?.value || `Einheit ${einheitNummer}`;
+                
+                let einheitPunkte = 0;
+                let einheitGewichtung = 0;
+                let hatBewertungen = false;
+                
+                zusammenfassungHtml += `<div style="margin-bottom: 15px;">`;
+                zusammenfassungHtml += `<div style="font-weight: bold; color: #2c5aa0; font-size: 14px; margin-bottom: 8px;">${einheitName}:</div>`;
+                
+                const raeume = einheit.querySelectorAll('.room-block');
+                raeume.forEach((raum, raumIndex) => {
+                    const raumNummer = raumIndex + 1;
+                    const raumTypSelect = raum.querySelector(`select[name="einheit_${einheitNummer}_raum_${raumNummer}_typ"]`);
+                    const bewertungSelect = raum.querySelector(`select[name="einheit_${einheitNummer}_raum_${raumNummer}_bewertung"]`);
+                    
+                    if (raumTypSelect && bewertungSelect) {
+                        const raumTyp = raumTypSelect.value;
+                        const bewertung = bewertungSelect.value;
+                        
+                        if (raumTyp && bewertung) {
+                            const gewichtung = raumTyp === 'badezimmer' ? 2 : 1;
+                            const gewichtungsText = raumTyp === 'badezimmer' ? ' [2x]' : '';
+                            
+                            zusammenfassungHtml += `<div style="margin-left: 10px; font-size: 12px;">`;
+                            zusammenfassungHtml += `- Raum ${raumNummer} (${raumTyp}): ${bewertung} Punkte${gewichtungsText}</div>`;
+                            
+                            // Für Durchschnittsberechnung
+                            const punkte = parseInt(bewertung);
+                            einheitPunkte += punkte * gewichtung;
+                            einheitGewichtung += gewichtung;
+                            hatBewertungen = true;
+                        }
+                    }
+                });
+                
+                // Durchschnitt pro Einheit
+                if (hatBewertungen && einheitGewichtung > 0) {
+                    const durchschnitt = (einheitPunkte / einheitGewichtung).toFixed(1);
+                    zusammenfassungHtml += `<div style="margin-left: 10px; font-weight: bold; color: #2c5aa0; margin-top: 5px;">Durchschnitt ${einheitName}: ${durchschnitt} Punkte</div>`;
+                    
+                    // Für Gesamtdurchschnitt
+                    gesamtPunkte += einheitPunkte;
+                    gesamtGewichtung += einheitGewichtung;
+                    anzahlEinheiten++;
+                }
+                
+                zusammenfassungHtml += `</div>`;
+            });
+            
+            // Gesamtdurchschnitt
+            if (gesamtGewichtung > 0) {
+                const gesamtDurchschnitt = (gesamtPunkte / gesamtGewichtung).toFixed(1);
+                zusammenfassungHtml += `
+                    <div style="background: #f0f8ff; border: 2px solid #2c5aa0; padding: 12px; border-radius: 5px; margin: 15px 0;">
+                        <div style="font-weight: bold; color: #2c5aa0; font-size: 16px;">
+                            🏆 GESAMTDURCHSCHNITT: ${gesamtDurchschnitt} Punkte
+                        </div>
+                        <div style="font-size: 11px; color: #666; margin-top: 5px;">
+                            Berechnung: ${gesamtPunkte} Punkte ÷ ${gesamtGewichtung} Gewichtung | Badezimmer zählen doppelt
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Gesamtkostenschätzung
+            zusammenfassungHtml += `
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #2c5aa0;">
+                    <div style="font-weight: bold; margin-bottom: 10px;">Gesamtprojekt-Kostenschätzung:</div>
+                    <input type="text" name="gesamtprojekt_kosten" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; margin-bottom: 5px;" placeholder="">
+                </div>
+            `;
+            
+            zusammenfassungHtml += `</div>`;
+            
+            container.innerHTML = zusammenfassungHtml;
         }
         
         // Initial eine Einheit generieren
