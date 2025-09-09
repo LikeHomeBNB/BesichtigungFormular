@@ -675,29 +675,56 @@
             setTimeout(updateZusammenfassung, 200);
         }
 
+        // Definiere typische Raumkombinationen für verschiedene Wohnungsgrößen
+        const typischeRaumkombinationen = {
+            1: ['badezimmer'],
+            2: ['badezimmer', 'schlafzimmer'],
+            3: ['flur', 'badezimmer', 'wohnzimmer'],
+            4: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer'],
+            5: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer', 'kueche'],
+            6: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer', 'kueche', 'kinderzimmer'],
+            7: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer', 'kueche', 'kinderzimmer', 'arbeitszimmer'],
+            8: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer', 'kueche', 'kinderzimmer', 'arbeitszimmer', 'gaeste_wc'],
+            9: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer', 'kueche', 'kinderzimmer', 'arbeitszimmer', 'gaeste_wc', 'balkon'],
+            10: ['flur', 'badezimmer', 'wohnzimmer', 'schlafzimmer', 'kueche', 'kinderzimmer', 'arbeitszimmer', 'gaeste_wc', 'balkon', 'abstellraum']
+        };
+
         function generateRaeume(einheitNummer) {
             const anzahl = parseInt(document.getElementById(`anzahl-raeume-${einheitNummer}`).value);
             const container = document.getElementById(`raeume-container-${einheitNummer}`);
             
             container.innerHTML = '';
             
+            // Hole die vordefinierte Raumkombination oder verwende eine Standard-Kombination
+            const vorausgewaehlteRaeume = typischeRaumkombinationen[anzahl] || 
+                Array(anzahl).fill('').map((_, i) => {
+                    // Fallback für mehr als 10 Räume
+                    if (i === 0) return 'flur';
+                    if (i === 1) return 'badezimmer';
+                    if (i === 2) return 'wohnzimmer';
+                    if (i === 3) return 'schlafzimmer';
+                    if (i === 4) return 'kueche';
+                    return ''; // Leer lassen für zusätzliche Räume
+                });
+            
             for (let r = 1; r <= anzahl; r++) {
+                const vorausgewaehlterRaum = vorausgewaehlteRaeume[r - 1] || '';
                 const raumHtml = `
                     <div class="room-block" id="raum-${einheitNummer}-${r}">
                         <div class="room-title">
                             Raum ${r}: 
                             <select name="einheit_${einheitNummer}_raum_${r}_typ" class="room-type-select" onchange="updateRaumKriterien(${einheitNummer}, ${r})" style="width: 150px;">
                                 <option value="">-- Raum-Typ wählen --</option>
-                                <option value="badezimmer">Badezimmer</option>
-                                <option value="kueche">Küche</option>
-                                <option value="wohnzimmer">Wohnzimmer</option>
-                                <option value="schlafzimmer">Schlafzimmer</option>
-                                <option value="kinderzimmer">Kinderzimmer</option>
-                                <option value="flur">Flur</option>
-                                <option value="balkon">Balkon</option>
-                                <option value="arbeitszimmer">Arbeitszimmer</option>
-                                <option value="abstellraum">Abstellraum</option>
-                                <option value="gaeste_wc">Gäste-WC</option>
+                                <option value="badezimmer" ${vorausgewaehlterRaum === 'badezimmer' ? 'selected' : ''}>Badezimmer</option>
+                                <option value="kueche" ${vorausgewaehlterRaum === 'kueche' ? 'selected' : ''}>Küche</option>
+                                <option value="wohnzimmer" ${vorausgewaehlterRaum === 'wohnzimmer' ? 'selected' : ''}>Wohnzimmer</option>
+                                <option value="schlafzimmer" ${vorausgewaehlterRaum === 'schlafzimmer' ? 'selected' : ''}>Schlafzimmer</option>
+                                <option value="kinderzimmer" ${vorausgewaehlterRaum === 'kinderzimmer' ? 'selected' : ''}>Kinderzimmer</option>
+                                <option value="flur" ${vorausgewaehlterRaum === 'flur' ? 'selected' : ''}>Flur</option>
+                                <option value="balkon" ${vorausgewaehlterRaum === 'balkon' ? 'selected' : ''}>Balkon</option>
+                                <option value="arbeitszimmer" ${vorausgewaehlterRaum === 'arbeitszimmer' ? 'selected' : ''}>Arbeitszimmer</option>
+                                <option value="abstellraum" ${vorausgewaehlterRaum === 'abstellraum' ? 'selected' : ''}>Abstellraum</option>
+                                <option value="gaeste_wc" ${vorausgewaehlterRaum === 'gaeste_wc' ? 'selected' : ''}>Gäste-WC</option>
                             </select>
                             <button class="remove-room-button no-print" onclick="removeRaum(${einheitNummer}, ${r})" style="margin-left: 10px;">❌</button>
                         </div>
@@ -750,6 +777,13 @@
                 </div>
             `;
             container.innerHTML += addButtonHtml;
+            
+            // Aktualisiere Kriterien für alle vorausgewählten Räume
+            for (let r = 1; r <= anzahl; r++) {
+                if (vorausgewaehlteRaeume[r - 1]) {
+                    updateRaumKriterien(einheitNummer, r);
+                }
+            }
             
             updateZusammenfassung();
         }
