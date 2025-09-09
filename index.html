@@ -633,6 +633,11 @@
                                 <input type="number" id="anzahl-raeume-${i}" min="1" max="15" value="3" style="width: 60px;">
                                 <button class="generate-button" onclick="generateRaeume(${i})">Räume generieren</button>
                             </div>
+                            <div class="form-row" style="margin-top: 10px;">
+                                <label>Alle Räume setzen auf:</label>
+                                <input type="number" id="alle-raeume-wert-${i}" min="1" max="10" style="width: 50px;">
+                                <button class="generate-button" onclick="setzeAlleRaeume(${i})" style="background-color: #ff6b35;">Alle Räume setzen</button>
+                            </div>
                         </div>
                         
                         <!-- Container für Räume -->
@@ -651,17 +656,6 @@
                             <div class="subsection-title">Gesamtkostenschätzung:</div>
                             <input type="text" name="einheit_${i}_gesamtkosten" class="disabled-field" placeholder="" readonly>
                             <div class="neuwo-note">Kostenschätzung erfolgt durch NeuWohnen</div>
-                        </div>
-                        
-                        <!-- Renovierungsart-Empfehlung (ausgegraut) -->
-                        <div class="subsection">
-                            <div class="subsection-title">Renovierungsart-Empfehlung:</div>
-                            <select name="einheit_${i}_renovierungsart" class="rating-select disabled-field" disabled>
-                                <option value="">Von NeuWohnen zu bestimmen</option>
-                                <option value="einzelmassnahmen">Einzelmaßnahmen</option>
-                                <option value="kernsanierung">Kernsanierung</option>
-                            </select>
-                            <div class="neuwo-note">Wird von NeuWohnen bestimmt</div>
                         </div>
                     </div>
                 `;
@@ -799,6 +793,30 @@
             } else {
                 kriterienDiv.style.display = 'none';
             }
+        }
+
+        function setzeAlleRaeume(einheitNummer) {
+            const wert = document.getElementById(`alle-raeume-wert-${einheitNummer}`).value;
+            
+            if (!wert || wert < 1 || wert > 10) {
+                alert('Bitte geben Sie einen Wert zwischen 1 und 10 ein.');
+                return;
+            }
+            
+            // Finde alle Bewertungs-Selects für diese Einheit
+            const container = document.getElementById(`raeume-container-${einheitNummer}`);
+            const bewertungsSelects = container.querySelectorAll('select[class="rating-scale-select"]');
+            
+            // Setze alle Bewertungen auf den gewählten Wert
+            bewertungsSelects.forEach(select => {
+                select.value = wert;
+            });
+            
+            // Zusammenfassung aktualisieren
+            updateZusammenfassung();
+            
+            // Bestätigungsmeldung
+            alert(`Alle ${bewertungsSelects.length} Räume wurden auf Bewertung ${wert} gesetzt.`);
         }
 
         function addRaum(einheitNummer) {
